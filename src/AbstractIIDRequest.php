@@ -26,8 +26,14 @@ abstract class AbstractIIDRequest implements IIDRequestInterface
     /** @var Serializer */
     protected $serializer;
 
+    /**
+     * @return string
+     */
     abstract protected function getServiceUri():string;
 
+    /**
+     * @param $authKey
+     */
     public function __construct($authKey)
     {
         $this->authKey = $authKey;
@@ -35,6 +41,10 @@ abstract class AbstractIIDRequest implements IIDRequestInterface
         $this->serializer = new Serializer([$normalizer], [new JsonEncoder()]);
     }
 
+    /**
+     * @param ClientInterface $client
+     * @return IIDRequestInterface
+     */
     public function setGuzzleClient(ClientInterface $client): IIDRequestInterface
     {
         $this->guzzleClient = $client;
@@ -42,6 +52,9 @@ abstract class AbstractIIDRequest implements IIDRequestInterface
         return $this;
     }
 
+    /**
+     * @return ClientInterface
+     */
     public function getGuzzleClient(): ClientInterface
     {
         if (!$this->guzzleClient instanceof ClientInterface) {
@@ -51,6 +64,12 @@ abstract class AbstractIIDRequest implements IIDRequestInterface
         return $this->guzzleClient;
     }
 
+    /**
+     * @param string $method
+     * @param string $relResourcePath
+     * @param string|null $body
+     * @return ResponseInterface
+     */
     public function request(string $method, string $relResourcePath, string $body = null): ResponseInterface
     {
         $uri = $this->getServiceUri().$relResourcePath;

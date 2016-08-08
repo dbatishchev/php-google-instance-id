@@ -14,6 +14,10 @@ class Server extends AbstractIIDRequest
 {
     const GOOGLE_SERVICE_IID_URL = 'https://iid.googleapis.com/iid/';
 
+    /**
+     * @param string $iidToken
+     * @return InfoResponse
+     */
     public function getInfo(string $iidToken): InfoResponse
     {
         $response = $this->request('get', 'info/'.$iidToken);
@@ -24,6 +28,11 @@ class Server extends AbstractIIDRequest
         throw new \LogicException('Unable to deserialize return value');
     }
 
+    /**
+     * @param string $application
+     * @param array $apnsTokens
+     * @return BatchImportResponse
+     */
     public function batchImport(string $application, array $apnsTokens): BatchImportResponse
     {
         $batchImportRequest = new BatchImportRequest();
@@ -35,6 +44,9 @@ class Server extends AbstractIIDRequest
         return $this->serializer->deserialize($response, 'lutskanu\GoogleInstanceId\Response\BatchImportResponse', 'json');
     }
 
+    /**
+     * @return string
+     */
     protected function getServiceUri():string
     {
         return self::GOOGLE_SERVICE_IID_URL;
